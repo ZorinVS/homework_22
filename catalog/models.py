@@ -60,7 +60,7 @@ class Product(models.Model):
 
 class Contact(models.Model):
     country = models.CharField(
-        max_length=60, verbose_name="County", help_text="Введите название страны"
+        max_length=60, verbose_name="Country", help_text="Введите название страны"
     )
     tin = models.CharField(
         max_length=20, verbose_name="Tax Identification Number", help_text="Введите ИНН"
