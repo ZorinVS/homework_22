@@ -1,0 +1,11 @@
+[
+{
+    "model": "catalog.contact",
+    "pk": 1,
+    "fields": {
+        "country": "USA",
+        "tin": "91-1144442",
+        "address": "Redmond,WA,98052-6399"
+    }
+}
+]
