@@ -1,0 +1,14 @@
+<!-- Шаблон для отображения списка товаров конкретной категории -->
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ category_name }} · Skystore{% endblock %}
+
+{% block content %}
+{% include "catalog/includes/header.html" with title="Skystore" %}
+<h2>{{ category_name }}</h2>
+{% if products %}
+    {% include "catalog/includes/products_list.html" %}
+{% else %}
+    <p>Пока здесь пусто, но скоро появятся новые товары. Следите за обновлениями!</p>
+{% endif %}
+{% endblock %}
