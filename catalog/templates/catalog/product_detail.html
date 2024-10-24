@@ -1,0 +1,49 @@
+<!-- Шаблон для отображения страницы с подробной информацией о товаре -->
+{% extends "catalog/base.html" %}
+
+{% load my_tags %}
+
+{% block title %}{{ product.name }} · Skystore{% endblock %}
+
+{% block content %}
+{% include "catalog/includes/header.html" with title="Skystore" %}
+<div class="row">
+    <!-- Левая колонка (отступ) -->
+    <div class="col-1"></div>
+    <!-- Карточка -->
+    <div class="col-10">
+        <div class="card mb-4 box-shadow">
+            <!-- Заголовок карточки -->
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal text-center">{{ product.name }}</h4>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Левый отступ -->
+                    <div class="col-2"></div>
+                    <!-- Контент карточки -->
+                    <div class="col-8">
+                        <p class="mb-1"><b>Товар категории '{{ product.category }}':</b> {{ product.description }}</p>
+                        {% if product.image %}
+                            <img src="{{ product.image|media_filter }}" class="img-fluid" alt="{{ product.name }}" style="border-radius: 5px;">
+                        {% else %}
+                            <img src="/media/catalog/images/developed_by.png" class="img-fluid" alt="{{ product.name }}" style="border-radius: 5px;">
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-4 mt-2"><h3><b>Цена:</b> ${{ product.price }}</h3></div>
+                            <div class="col-8 text-end mt-1"><p><b>Дата последнего изменения:</b> {{ product.updated_at|date:"d.m.Y" }}</p></div>
+                        </div>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    </div>
+                    <!-- Правый отступ -->
+                    <div class="col-2"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Правая колонка (отступ) -->
+    <div class="col-1"></div>
+</div>
+{% endblock %}
