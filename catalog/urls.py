@@ -5,12 +5,12 @@ from django.urls import path
 app_name = CatalogConfig.name
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("contacts/", views.contacts, name="contacts"),
+    path("", views.HomeListView.as_view(), name="home"),
+    path("contacts/", views.ContactsTemplateView.as_view(), name="contacts"),
     path(
         "category-<str:category_name>/",
-        views.category_products,
+        views.CategoryProductsListView.as_view(),
         name="category_products",
     ),
-    path("product-detail/<int:pk>/", views.product_detail, name="product_detail"),
+    path("product-detail/<int:pk>/", views.ProductDetailView.as_view(), name="product_detail"),
 ]

@@ -1,0 +1,51 @@
+{% extends "catalog/base.html" %}
+
+{% load my_tags %}
+{% load static %}
+
+{% block title %}{{article.title}} · Skyblog{% endblock %}
+
+{% block header %}{% include "blog/includes/navbar.html" %}{% endblock %}
+
+{% block content %}
+<div class="ms-5 pb-4 my-md-5 pb-md-5 border-bottom">
+    <a class="p-2 btn btn-outline-primary" href="{% url 'blog:article_update' article.pk %}">Редактировать</a>
+    <a class="p-2 btn btn-outline-danger" href="{% url 'blog:article_delete' article.pk %}">Удалить</a>
+</div>
+
+<div class="row">
+    <!-- Левая колонка (отступ) -->
+    <div class="col-2"></div>
+
+    <div class="col-8 d-flex flex-column">
+    <!-- Превью -->
+    {% if article.preview %}
+        <img src="{{ article.preview|media_filter }}" class="card-img-top" alt="..." style="height: 350px; object-fit: cover; border-radius: 8px;">
+    {% else %}
+        <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 350px; border: 1px solid #ddd; color: #888; border-radius: 8px;">
+            No Image Uploaded
+        </div>
+    {% endif %}
+    <!-- Заголовок статьи -->
+    <h4 class="mt-2">{{ article.title }}</h4>
+    <!-- Количество просмотров, дата создания -->
+    <div class="d-flex justify-content-start small text-muted mt-2">
+        <div class="d-flex align-items-center me-3">
+            <img class="icon me-1" src="{% static 'images/eye.svg' %}" alt="Views icon" style="width: 16px; height: 16px;">
+            <span>{{ article.views_counter }}</span>
+        </div>
+        <div class="d-flex align-items-center ms-3">
+            <img class="icon me-1" src="{% static 'images/clock.svg' %}" alt="Clock icon" style="width: 16px; height: 16px;">
+            <span>{{ article.created_at }}</span>
+        </div>
+    </div>
+    <!-- Контент статьи -->
+    <p class="flex-grow-1">{{ article.body|linebreaks }}</p>
+    </div>
+
+    <!-- Правая колонка (отступ) -->
+    <div class="col-2"></div>
+</div>
+
+
+{% endblock %}

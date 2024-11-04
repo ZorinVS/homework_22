@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Регистрация созданного приложения
     "catalog",
+    "blog"
 ]
 
 MIDDLEWARE = [

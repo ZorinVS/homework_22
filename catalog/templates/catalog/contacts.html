@@ -2,11 +2,15 @@
 
 {% block title %}Контакты · Skystore{% endblock %}
 
+{% block header %}
+{% include "catalog/includes/navbar.html" %}
+{% endblock %}
+
 {% block content %}
 {% include "catalog/includes/header.html" with title="Контакты" %}
 <div class="row text-start">
-    <!-- Контактная информация -->
     <div class="col-lg-9 col-md-6 col-sm-12">
+        <!-- Контактная информация -->
         <div class="card mb-4 box-shadow">
             <div class="card-body">
                 <table class="table table-striped">
@@ -24,6 +28,12 @@
                     </tr>
                 </table>
             </div>
+        </div>
+        <!-- Сообщение об успешном заполнении формы -->
+        <div class="mt-5 text-center">
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
         </div>
     </div>
     <!-- Форма обратной связи -->
