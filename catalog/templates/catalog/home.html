@@ -3,8 +3,14 @@
 
 {% block title %}Skystore{% endblock %}
 
+{% block header %}{% include "catalog/includes/navbar.html" %}{% endblock %}
+
 {% block content %}
 {% include "catalog/includes/header.html" with title="Skystore" description="Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели продать" %}
 <h2>Последние добавленные продукты</h2>
-{% include "catalog/includes/products_list.html" %}
+{% if product_list %}
+    {% include "catalog/includes/products_list.html" %}
+{% else %}
+    <p>Пока здесь пусто, но скоро появятся новые товары. Следите за обновлениями!</p>
+{% endif %}
 {% endblock %}

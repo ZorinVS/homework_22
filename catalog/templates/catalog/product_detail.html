@@ -5,6 +5,10 @@
 
 {% block title %}{{ product.name }} · Skystore{% endblock %}
 
+{% block header %}
+{% include "catalog/includes/navbar.html" %}
+{% endblock %}
+
 {% block content %}
 {% include "catalog/includes/header.html" with title="Skystore" %}
 <div class="row">
