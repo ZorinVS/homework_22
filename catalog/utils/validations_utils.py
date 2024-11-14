@@ -36,15 +36,3 @@ def convert_size(size: int | float, unit: str = "b") -> int | float:
     """
     size_ratio = 1024 ** 2
     return round(size * size_ratio, 1) if unit == "mb" else round(size / size_ratio, 1)
-
-
-if __name__ == "__main__":
-    s = float(input("Размер: "))
-    u = input("Единица: ")
-
-    if u:
-        res = convert_size(s, u)
-    else:
-        res = convert_size(s)
-
-    print(res)
