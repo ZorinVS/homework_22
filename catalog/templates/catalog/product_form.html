@@ -1,0 +1,21 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Форма продукта · Skystore{% endblock %}
+
+{% block header %}{% include "catalog/includes/navbar.html" %}{% endblock %}
+
+{% block content %}
+<h1 class="mb-3 mt-4">Форма продукта</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.as_p }}
+    {% if product %}
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-secondary">Отмена</a>
+    {% else %}
+    <button type="submit" class="btn btn-outline-primary">Добавить</button>
+    <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Отмена</a>
+    {% endif %}
+</form>
+{% endblock %}

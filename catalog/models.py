@@ -23,27 +23,27 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(
-        max_length=150, verbose_name="Name", help_text="Введите название продукта"
+        max_length=150, verbose_name="Название", help_text="Введите название продукта"
     )
     description = models.TextField(
-        verbose_name="Description", help_text="Введите описание продукта"
+        verbose_name="Описание", help_text="Введите описание продукта"
     )
     image = models.ImageField(
-        blank=True, null=True, upload_to="catalog/images/", verbose_name="Image"
+        blank=True, null=True, upload_to="catalog/images/", verbose_name="Изображение"
     )
     category = models.ForeignKey(
         Category,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        verbose_name="Category",
+        verbose_name="Категория",
         help_text="Укажите категорию",
         related_name="products",
     )
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name="Price",
+        verbose_name="Цена",
         help_text="Укажите цену товара",
     )
     created_at = models.DateField(auto_now_add=True, verbose_name="Created at")

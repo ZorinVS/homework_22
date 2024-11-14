@@ -1,8 +1,9 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, ListView, DetailView
-from django.core.management import call_command
-from tabulate import tabulate
+
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
+from .forms import ProductForm
 from .models import Contact, Product
 
 
@@ -60,5 +61,22 @@ class CategoryProductsListView(ListView):
         return context
 
 
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy("catalog:home")
+
+
 class ProductDetailView(DetailView):
     model = Product
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy("catalog:home")
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("catalog:home")

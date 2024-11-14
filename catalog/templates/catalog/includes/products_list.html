@@ -3,13 +3,13 @@
     {% for product in product_list %}
         <div class="col-4">
             <div class="card mb-4 box-shadow">
+                <a href="/product-detail/{{ product.pk }}/" class="text-dark text-decoration-none">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">
-                    <a href="/product-detail/{{ product.pk }}/" class="text-dark text-decoration-none">
                         {{ product.name|truncatechars:35 }}
-                    </a>
                     </h4>
                 </div>
+                </a>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">${{ product.price }}</h1>
                     <p>{{ product.description|truncatechars:100 }}</p>
