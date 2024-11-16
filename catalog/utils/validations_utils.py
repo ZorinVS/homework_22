@@ -2,17 +2,17 @@ def check_input(field_data: str, banned_words: list) -> str | list:
     """ Проверка входных данных на наличие запрещенных слов """
 
     # Перевод слов в нижний регистр
-    field_data_lower = [word.lower() for word in field_data.split()]
+    field_data_lower = field_data.lower()
     banned_words_lower = [word.lower() for word in banned_words]
 
     # Список для хранения найденных запрещенных слов
     dangers_found = []
 
     for danger in banned_words_lower:
-        if len(field_data_lower) == 1 and danger in field_data_lower:
+        if (1 + field_data.count(" ")) == 1 and danger in field_data_lower:
             return danger
         elif danger in field_data_lower:
-            dangers_found.append(danger)
+            dangers_found.append(danger.upper())
 
     is_one = len(dangers_found) == 1
     return dangers_found[0] if is_one else dangers_found
