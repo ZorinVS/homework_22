@@ -1,0 +1,14 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Регистрация · Skystore{% endblock %}
+
+{% block header %}{% include "catalog/includes/navbar.html" %}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Форма регистрации</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="action" value="save" class="btn btn-outline-primary">Регистрация</button>
+</form>
+{% endblock %}
