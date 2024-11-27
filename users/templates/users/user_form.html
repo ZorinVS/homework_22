@@ -1,0 +1,22 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Форма пользователя · Skystore{% endblock %}
+
+{% block header %}{% include "catalog/includes/navbar.html" %}{% endblock %}
+
+{% block content %}
+<h1 class="mb-3 mt-4">Редактирование пользователя</h1>
+<div class="mb-3">
+    <label class="form-label">Email:</label>
+    <p class="form-control" style="margin-top: -5px;">{{ user.email }}</p>
+<!--    <label for="staticEmail" class="form-label">Email:</label>-->
+<!--    <p class="form-control" id="staticEmail">{{ user.email }}</p>-->
+</div>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+    <a href="/" class="btn btn-outline-secondary">Отмена</a>
+</form>
+{% endblock %}
