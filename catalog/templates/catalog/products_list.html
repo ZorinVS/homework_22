@@ -1,0 +1,14 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ title }} · Skystore{% endblock %}
+
+{% block header %}{% include "catalog/includes/navbar.html" %}{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">{{ header }}</h2>
+{% if product_list %}
+    {% include "catalog/includes/inc_products_list.html" %}
+{% else %}
+    <p>Продукты пока не добавлены</p>
+{% endif %}
+{% endblock %}

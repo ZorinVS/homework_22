@@ -5,11 +5,12 @@
     <nav class="ms-5 d-flex w-100 justify-content-between">
         <!-- Кнопки слева -->
         <div>
-              <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
-                <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
-                {% if user.is_authenticated %}
-                    <a class="p-2 btn btn-outline-primary" href="/product-create/">Добавить продукт</a>
-                {% endif %}
+            <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
+            <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
+            {% if user.is_authenticated %}
+                <a class="p-2 btn btn-outline-primary" href="/unpublished-products/">Неопубликованное</a>
+                {% if not perms.catalog.can_unpublish_product %}<a class="p-2 btn btn-outline-primary" href="/product-create/">Добавить продукт</a>{% endif %}
+            {% endif %}
         </div>
         <!-- Пользователь справа -->
         <div class="dropdown ms-auto">
@@ -30,16 +31,20 @@
             <!-- Выпадающее меню -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                 {% if user.is_authenticated %}
-                <li><a class="dropdown-item" href="/users/user-update/{{ user.pk }}/">Редактировать</a></li>
-                <li>
-                    <form method="post" action="{% url 'users:logout' %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="dropdown-item">Выйти</button>
-                    </form>
-                </li>
+                    {% if not perms.catalog.can_unpublish_product %}
+                    <li><a class="dropdown-item" href="{% url 'catalog:user_products' %}">Продукты</a></li>
+                    <hr class="dropdown-divider">
+                    {% endif %}
+                    <li><a class="dropdown-item" href="/users/user-update/{{ user.pk }}/">Редактировать</a></li>
+                    <li>
+                        <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item">Выйти</button>
+                        </form>
+                    </li>
                 {% else %}
-                <li><a class="dropdown-item" href="/users/login/">Вход</a></li>
-                <li><a class="dropdown-item" href="/users/register/">Регистрация</a></li>
+                    <li><a class="dropdown-item" href="/users/login/">Вход</a></li>
+                    <li><a class="dropdown-item" href="/users/register/">Регистрация</a></li>
                 {% endif %}
             </ul>
         </div>

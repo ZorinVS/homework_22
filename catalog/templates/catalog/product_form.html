@@ -11,9 +11,13 @@
     {{ form.non_field_errors }}
     {{ form.as_p }}
     {% if product %}
+    {% if not product.is_published %}
+    <button type="submit" name="action" value="publish" class="btn btn-success">Опубликовать</button>
+    {% endif %}
     <button type="submit" class="btn btn-outline-primary">Сохранить</button>
     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-secondary">Отмена</a>
     {% else %}
+    <button type="submit" name="action" value="publish" class="btn btn-success">Опубликовать</button>
     <button type="submit" class="btn btn-outline-primary">Добавить</button>
     <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Отмена</a>
     {% endif %}
