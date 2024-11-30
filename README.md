@@ -83,19 +83,9 @@ python3 manage.py csu
 ```
 
 ## Наполнение данными
-1. Тестовые данные для приложения `catalog`:
+Тестовые данные для всего проекта:
 ```bash
-python manage.py loaddata contact_fixture.json --format json
-```
-```bash
-python manage.py loaddata categories_fixture.json --format json
-```
-```bash
-python manage.py loaddata products_fixture.json --format json
-```
-2. Тестовые данные для приложения `blog`:
-```bash
-python manage.py loaddata articles_fixture.json --format json
+python3 manage.py load_test_data
 ```
 
 ## Запуск
