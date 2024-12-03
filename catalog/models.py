@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 
 class Category(models.Model):
@@ -46,8 +47,14 @@ class Product(models.Model):
         verbose_name="Цена",
         help_text="Укажите цену товара",
     )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец", related_name="products",)
     created_at = models.DateField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateField(auto_now=True, verbose_name="Updated at")
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name="Статус публикации",
+        help_text="Опубликовать продукт",
+    )
 
     def __str__(self):
         return self.name
@@ -56,6 +63,9 @@ class Product(models.Model):
         verbose_name = "product"
         verbose_name_plural = "products"
         ordering = ["name", "price", "updated_at"]
+        permissions = [
+            ("can_unpublish_product", "Can unpublish product"),
+        ]
 
 
 class Contact(models.Model):

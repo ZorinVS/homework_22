@@ -1,8 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Product
-from .utils.mixins import StyleFormMixin
-from .utils.validations_utils import check_input, make_warning, convert_size
+from catalog.models import Product
+from catalog.utils.mixins import StyleFormMixin
+from catalog.utils.validations_utils import check_input, make_warning, convert_size
 
 
 class ProductForm(StyleFormMixin, forms.ModelForm):
@@ -18,12 +18,12 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         "category": {"class": "form-control"},
         "price": {"class": "form-control", "placeholder": "Введите цену товара"},
     }
-    VALID_TYPES = ["image/jpeg", "image/png"]  # Допускаются файлы с форматами JPEG или PNG
-    IMAGE_SIZE_LIMIT = 5.0  # Допускаются файлы размером до 5 МБ
+    # VALID_TYPES = ["image/jpeg", "image/png"]  # Допускаются файлы с форматами JPEG или PNG
+    # IMAGE_SIZE_LIMIT = 5.0  # Допускаются файлы размером до 5 МБ
 
     class Meta:
         model = Product
-        exclude = ["created_at", "updated_at"]
+        exclude = ["created_at", "updated_at", "is_published", "owner"]
 
     def clean_name(self):
         name = self.cleaned_data.get("name", "")
@@ -39,19 +39,19 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             raise ValidationError(make_warning(banned_input))
         return description
 
-    def clean_image(self):
-        image = self.cleaned_data.get("image")
-        if image:
-            image_format = image.content_type
-            if image_format not in self.VALID_TYPES:
-                raise ValidationError(f"Формат вашего файла – {image_format.split('/')[1].upper()}! "
-                                      f"Допустимые форматы: JPEG и PNG.")
-
-            image_size = convert_size(image.size)
-            if image_size > self.IMAGE_SIZE_LIMIT:
-                raise ValidationError(f"Размер вашего файла: {image_size} МБ! Изображение не должно превышать "
-                                      f"{self.IMAGE_SIZE_LIMIT} МБ.")
-        return image
+    # def clean_image(self):
+    #     image = self.cleaned_data.get("image")
+    #     if image:
+    #         image_format = image.content_type
+    #         if image_format not in self.VALID_TYPES:
+    #             raise ValidationError(f"Формат вашего файла – {image_format.split('/')[1].upper()}! "
+    #                                   f"Допустимые форматы: JPEG и PNG.")
+    #
+    #         image_size = convert_size(image.size)
+    #         if image_size > self.IMAGE_SIZE_LIMIT:
+    #             raise ValidationError(f"Размер вашего файла: {image_size} МБ! Изображение не должно превышать "
+    #                                   f"{self.IMAGE_SIZE_LIMIT} МБ.")
+    #     return image
 
     def clean_price(self):
         price = self.cleaned_data.get("price", -1)

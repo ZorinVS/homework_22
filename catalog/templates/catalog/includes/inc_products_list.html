@@ -3,7 +3,7 @@
     {% for product in product_list %}
         <div class="col-4">
             <div class="card mb-4 box-shadow">
-                {% if user.is_authenticated %}
+                {% if user == product.owner or perms.catalog.can_unpublish_product %}
                     <a href="/product-detail/{{ product.pk }}/" class="text-dark text-decoration-none">
                 {% endif %}
                 <div class="card-header">
