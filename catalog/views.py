@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from catalog import services
 from catalog.forms import ProductForm
-from catalog.models import Contact, Product
+from catalog.models import Product
 
 
 class HomeListView(ListView):
@@ -15,7 +15,7 @@ class HomeListView(ListView):
 
     def get_queryset(self):
         # return Product.objects.order_by("-created_at")[:5]
-        return Product.objects.filter(is_published=True)
+        return services.get_products_list_from_cache("publication", True, "published_products")
 
 
 class ContactsTemplateView(TemplateView):
@@ -23,9 +23,7 @@ class ContactsTemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        contacts = Contact.objects.order_by("-id")
-        context_data["contact_info"] = contacts[0] if contacts.exists() else None
-        return context_data
+        return services.get_contact_info(context_data)
 
     def post(self, request):
         name = request.POST.get("name")
@@ -41,46 +39,30 @@ class ContactsTemplateView(TemplateView):
 class CategoryProductsListView(ListView):
     model = Product
     template_name = "catalog/category_products.html"
-
-    # Словарь содержащий человеко-читаемые названия категорий
-    categories_dict = {
-        "mailing-lists": "Рассылки",
-        "telegram-bots": "Телеграм боты",
-        "useful-utilities": "Полезные утилиты",
-        "web-applications": "Веб-приложения",
-        "microservices": "Микросервисы",
-    }
+    category_name = None
 
     def get_queryset(self):
         category_key = self.kwargs.get("category_name")
-        self.category_name = self.categories_dict.get(category_key)
-        if not self.category_name:
-            raise Http404("Category not found")
-        return Product.objects.filter(category__name=self.category_name)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["category_name"] = self.category_name
-        return context
-
-
-class UnpublishedProductsListView(LoginRequiredMixin, ListView):
-    model = Product
-    template_name = 'catalog/products_list.html'
-
-    def get_queryset(self):
-        user = self.request.user
-        queryset = Product.objects.filter(is_published=False)
-        # Просмотр всех неопубликованных продуктов доступен только для модератора
-        if not user.has_perm("catalog.can_unpublish_product"):
-            queryset = queryset.filter(owner=user)
+        self.category_name, queryset = services.get_products_by_category(category_key)
         return queryset
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["title"] = "Неопубликованное"
-        context_data["header"] = "Неопубликованные продукты"
-        return context_data
+        return services.set_context_data(context=context_data, category_name=self.category_name)
+
+
+class UnpublishedProductsListView(LoginRequiredMixin, ListView):
+    model = Product
+    template_name = "catalog/products_list.html"
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = services.get_products_list_from_cache("publication", False, "unpublished_products")
+        return services.get_unpublished_products(queryset, user)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        return services.set_context_data(context_data, title="Неопубликованное", header="Неопубликованные продукты")
 
 
 class UserProductsListView(LoginRequiredMixin, ListView):
@@ -89,13 +71,11 @@ class UserProductsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Product.objects.filter(owner=user)
+        return services.get_products_list_from_cache(filter_by="owner", value=user)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["title"] = "Продукты пользователя"
-        context_data["header"] = "Мои продукты"
-        return context_data
+        return services.set_context_data(context_data, title="Продукты пользователя", header="Мои продукты")
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -107,7 +87,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         user = self.request.user
         product = form.instance
         # Если пользователь является модератором
-        if user.has_perm("catalog.can_unpublish_product"):
+        if user.has_perm("catalog.can_unpublish_product") and not user.is_superuser:
             raise PermissionDenied
         product.owner = user
         if self.request.POST.get("action") == "publish":
