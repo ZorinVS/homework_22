@@ -89,5 +89,6 @@ python3 manage.py load_test_data
 ```
 
 ## Запуск
-1. В командной строке: `python3 manage.py runserver`
-2. В браузере: http://127.0.0.1:8000/
+1. В командной строке: `redis-server`
+2. В командной строке: `python3 manage.py runserver`
+3. В браузере: http://127.0.0.1:8000/
